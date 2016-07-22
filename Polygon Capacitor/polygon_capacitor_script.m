@@ -9,11 +9,11 @@ top_plate_voltage = 1.0;
 
 
 dmax = .015;    % d = separation of plates
-R = 40;            % radius of plates
-hmax = 0.005;    % h = depth difference of bottom plate
+R = 40.;            % radius of plates
+hmax = 0.014;    % h = depth difference of bottom plate
 hmin = -0.03;
 thick = 0.040;    % thickness of plates
-Number_of_Steps = 21;
+Number_of_Steps = 31;
 
 % Prospect for loop:
 d = dmax;
@@ -72,7 +72,7 @@ ei_probdef('millimeters','axi',1e-8,0,30)
 % manual mesh size entry (0) or automatic (1)? [call to triangle?]
     air_mesh = 1;
     cu_mesh = 1;
-    manual_mesh = 0.5;
+    manual_mesh = 0;
 
 %Draw top capacitor plate:
 ei_addnode(top_llx, top_lly);
@@ -152,20 +152,7 @@ ei_addboundprop('bot_plate_boundary',0.0, 0, 0, 0, 0);
 
 % Apply boundary properties
 
-% Top Plate
-ei_selectsegment(0, 0.5*(top_lly+top_uly));
-ei_selectsegment(R/2.0, d);
-ei_selectsegment(R, 0.5*(top_lry+top_ury));
-ei_selectsegment(R/2.0, d + thick);
-ei_setsegmentprop('top_plate_boundary', 0.1, 1, 0, 1,'<None>');
-ei_clearselected;
-    %Add nodes to group as well for cleaning!
-    ei_selectnode(0, d);
-    ei_selectnode(R, d);
-    ei_selectnode(R, d + thick);
-    ei_selectnode(0, d + thick);
-    ei_setnodeprop('<None>', 1, '<None>');
-    ei_clearselected;
+
 
 % Bottom Plate
 ei_selectsegment(0, -0.5*thick);
@@ -185,6 +172,21 @@ ei_clearselected;
     ei_selectnode(R - h_off, -thick);
     ei_setnodeprop('<None>', 2, '<None>');
     ei_clearselected;
+
+% Top Plate
+ei_selectsegment(0, 0.5*(top_lly+top_uly));
+ei_selectsegment(R/2.0, d);
+ei_selectsegment(R, 0.5*(top_lry+top_ury));
+ei_selectsegment(R/2.0, d + thick);
+ei_setsegmentprop('top_plate_boundary', 0.1, 1, 0, 1,'<None>');
+ei_clearselected;
+    %Add nodes to group as well for cleaning!
+    ei_selectnode(0, d);
+    ei_selectnode(R, d);
+    ei_selectnode(R, d + thick);
+    ei_selectnode(0, d + thick);
+    ei_setnodeprop('<None>', 1, '<None>');
+    ei_clearselected;    
 
 %Vacuum can, outside edges grounded to bottom plate. 
 ei_selectsegment(R/2, can_lly);
@@ -214,15 +216,17 @@ for j = 0:nd
     Energy_theory = 0.5*eps_0*pi*(R*R/1000/1000) / (d/1000) * (top_plate_voltage)*(top_plate_voltage);
     Relative_Error = abs(Energy_num - Energy_theory)/Energy_theory;
 
-    h_new = bot_ury - j*hinc;
+    h_new = bot_ury - j*hinc;	%but it's' still in millimeters!
 
-    %zeta = (bot_joint_lx/1000) + (R/1000)*(d/1000)/(h_new*1000);
-    %log_arg = 1 + (bot_joint_lx/1000)*(h_new*1000)/(R*d/1000/1000) - h_new/d;
-    %theory_capacitance = 2*pi*(1000*eps_0)*((bot_joint_lx/1000)^2/(2*(d/1000)) - R/1000/(1000*h_new) * ((R/1000) - (bot_joint_lx/1000) + zeta*log(log_arg)) );
+    %Converting eps to millimeters...?
+    zeta = (bot_joint_lx) + (R)*(d)/(h_new);
+    log_arg = 1 + (bot_joint_lx)*(h_new)/(R*d) - h_new/d;
+    theory_capacitance = 2*pi*(eps_0/1000.0)*((bot_joint_lx)^2/(2*d) - R/(h_new) * (R - bot_joint_lx + zeta*log(log_arg)) );
 
-	zeta = (bot_joint_lx/1000) + (R/1000)*(d/1000)/(h_new/1000);
-    log_arg = 1 + (bot_joint_lx/1000)*(h_new/1000)/(R*d/1000/1000) - h_new/1000/(d/1000);
-    theory_capacitance = 2*pi*(eps_0)*((bot_joint_lx/1000)^2/(2*(d/1000)) - R/1000/(h_new/1000) * ((R/1000) - (bot_joint_lx/1000) + zeta*log(log_arg)) );
+    %Converting everything to meters... 
+	%zeta = (bot_joint_lx/1000) + (R/1000)*(d/1000)/(h_new/1000);
+    %log_arg = 1 + (bot_joint_lx/1000)*(h_new/1000)/(R*d/1000/1000) - h_new/1000/(d/1000);
+    %theory_capacitance = 2*pi*(eps_0)*((bot_joint_lx/1000)^2/(2*(d/1000)) - R/1000/(h_new/1000) * ((R/1000) - (bot_joint_lx/1000) + zeta*log(log_arg)) );
 
 
     ana_nrg(j+1) = 0.5*theory_capacitance*(top_plate_voltage^2);

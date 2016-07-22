@@ -1,0 +1,106 @@
+[Format]      =  1
+[Precision]   =  1e-008
+[MinAngle]    =  30
+[Depth]       =  0
+[LengthUnits] =  millimeters
+[ProblemType] =  axisymmetric
+[Coordinates] =  cartesian
+[Comment]     =  "Add comments here."
+[PointProps]   = 0
+[BdryProps]   = 4
+  <BeginBdry>
+    <BdryName> = "top_plate_boundary"
+    <BdryType> = 0
+    <Vs> = 1
+    <qs> = 0
+    <c0> = 0
+    <c1> = 0
+  <EndBdry>
+  <BeginBdry>
+    <BdryName> = "bot_plate_boundary"
+    <BdryType> = 0
+    <Vs> = 0
+    <qs> = 0
+    <c0> = 0
+    <c1> = 0
+  <EndBdry>
+  <BeginBdry>
+    <BdryName> = "top_plate_boundary"
+    <BdryType> = 0
+    <Vs> = 1
+    <qs> = 0
+    <c0> = 0
+    <c1> = 0
+  <EndBdry>
+  <BeginBdry>
+    <BdryName> = "bot_plate_boundary"
+    <BdryType> = 0
+    <Vs> = 0
+    <qs> = 0
+    <c0> = 0
+    <c1> = 0
+  <EndBdry>
+[BlockProps]  = 4
+  <BeginBlock>
+    <BlockName> = "Air"
+    <ex> = 1
+    <ey> = 1
+    <qv> = 0
+  <EndBlock>
+  <BeginBlock>
+    <BlockName> = "Copper"
+    <ex> = 1
+    <ey> = 1
+    <qv> = 0
+  <EndBlock>
+  <BeginBlock>
+    <BlockName> = "Air"
+    <ex> = 1
+    <ey> = 1
+    <qv> = 0
+  <EndBlock>
+  <BeginBlock>
+    <BlockName> = "Copper"
+    <ex> = 1
+    <ey> = 1
+    <qv> = 0
+  <EndBlock>
+[ConductorProps]  = 0
+[NumPoints] = 14
+0	-110	0	0	0
+90	-110	0	0	0
+90	110	0	0	0
+0	110	0	0	0
+0	0.014999999999999999	0	1	0
+0	0.055	0	1	0
+40	0.014999999999999999	0	1	0
+40	0.055	0	1	0
+0	-0.040000000000000001	0	2	0
+0	0	0	2	0
+40	-0.069999999999999993	0	2	0
+40	-0.029999999999999982	0	2	0
+39.899999999999999	-0.040000000000000001	0	2	0
+39.899999999999999	0	0	2	0
+[NumSegments] = 16
+0	1	-1	4	0	3	0
+1	2	-1	4	0	3	0
+2	3	-1	4	0	3	0
+4	6	-1	3	0	1	0
+6	7	-1	3	0	1	0
+7	5	-1	3	0	1	0
+8	9	-1	4	0	2	0
+9	13	-1	4	0	2	0
+13	11	-1	4	0	2	0
+11	10	-1	4	0	2	0
+10	12	-1	4	0	2	0
+12	8	-1	4	0	2	0
+3	5	-1	0	0	0	0
+5	4	-1	3	0	1	0
+4	9	-1	0	0	0	0
+8	0	-1	0	0	0	0
+[NumArcSegments] = 0
+[NumHoles] = 0
+[NumBlockLabels] = 3
+20	10	3	-1	3	0
+20	0.035000000000000003	4	-1	1	0
+20	-0.02	4	-1	2	0
